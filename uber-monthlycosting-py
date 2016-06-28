@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# requiers requests, pyquery and dateutil
+# edit setting bellow
+
+# text from date table cell / returns (month:int, year:int)
+def DATE(text):
+    return (parse(text).month, parse(text).year)
+
+# text from price table cell / returns (price:float, currency:str)
+def PRICE(text):
+    return (float(text.split()[0].replace(',', '.')), text.split()[1].strip())
+
+# -------------------------------------------------------------------------------
+
+MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+import requests
+from pyquery import PyQuery as pq
+from dateutil.parser import parse
+from collections import OrderedDict as odict
+import getpass
+
+print "Enter your uber.com creds."
+
+LOGIN = raw_input("Login: ").strip()
+PASSWORD = getpass.getpass().strip()
+
+uber_session = requests.session()
+
+print "Loggin into uber"
+login_page = uber_session.get('https://login.uber.com/login').text
+login_page_parsed = pq(login_page)
+_csrf_token = login_page_parsed("form.form input[name=_csrf_token]").val()
+
+logged_in_response = uber_session.post("https://login.uber.com/login", data={
+    "_csrf_token": _csrf_token,
+    "access_token": "",
+    "email": LOGIN,
+    "password": PASSWORD,
+})
+assert logged_in_response.status_code == 200, "Status code isn't 200, got %d" % logged_in_response.status_code
+print "Logged into uber. Hacking time..."
+
+result = []
+page = 0
+while True:
+    print "Loading page %d" % page
+    trip_page = uber_session.get('https://riders.uber.com/trips?page=%d' % page).text
+    trip_page_parsed = pq(trip_page)
+    trips = trip_page_parsed("#trips-table .trip-expand__origin")
+    print "Page %d has %d trips" % (page, len(trips))
+    if len(trips) == 0:
+        break
+
+    for trip in trips:
+        trip_parsed = pq(trip)
+        date_text = trip_parsed.children('td').eq(1).text()
+        price_text = trip_parsed.children('td').eq(3).text()
+        date = DATE(date_text.split(' ')[0])
+        price = PRICE(price_text)
+
+        result.append((date, price))
+    page += 1
+
+result = reversed(result)
+
+def by_month(data):
+    out = odict()
+    for date, price in data:
+        if date not in out: out[date] = []
+        out[date].append(price)
+    for date, prices in out.iteritems():
+        yield date, prices
+
+def by_currency(data):
+    for date, prices in data:
+        out = odict()
+        for value, currency in prices:
+            if currency not in out: out[currency] = 0.0
+            out[currency] += value
+        for currency, total in out.iteritems():
+            yield date, currency, total
+
+def print_report(data):
+    for data, currency, total in data:
+        print "%d %s:\t%d %s" % (date[1], MONTHS[data[0] - 1], total, currency)
+
+print "\n-------------------------------------------------------------------------------"
+print "Result:\n"
+
+print_report(by_currency(by_month(result)))
