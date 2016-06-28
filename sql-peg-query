@@ -1,0 +1,54 @@
+create table if not exists passengers (
+	id int(11) not null auto_increment,
+	name varchar(128) not null,
+	phone_number varchar(32) not null,  
+  primary key (id)  
+) engine=InnoDB default charset=utf8;
+
+create table if not exists taxis (
+	id int(11) not null auto_increment,
+	code varchar(64) not null,	
+  primary key (id)  
+) engine=InnoDB default charset=utf8;
+
+create table if not exists drivers (
+	id int(11) not null auto_increment,
+	code varchar(64) not null,
+	name varchar(128) not null,  
+	taxi_id int(11) default null,	
+	default_latitude float default null,
+	default_longitude float default null,
+  primary key (id)  
+) engine=InnoDB default charset=utf8;
+
+create table if not exists bookings (
+	id int(11) not null auto_increment,
+	date datetime not null,	
+	state varchar(32) not null,	
+	passenger_id int(11) not null,
+	get_in_time datetime default null,
+	source_latitude float default null,
+	source_longitude float default null,
+	destination_latitude float default null,
+	destination_longitude float default null,
+  primary key (id)  
+) engine=InnoDB default charset=utf8;
+
+create table if not exists routes (
+	id int(11) not null auto_increment,
+	date datetime not null,	
+	taxi_id int(11) not null,
+	driver_id int(11) not null,
+	booking_id int(11) not null,
+  primary key (id)  
+) engine=InnoDB default charset=utf8;
+
+alter table drivers add constraint fk_drivers_taxis foreign key (taxi_id) references taxis (id);
+
+alter table bookings add constraint fk_bookings_passengers foreign key (passenger_id) references passengers (id);
+
+alter table routes add constraint fk_routes_taxis foreign key (taxi_id) references taxis (id);
+
+alter table routes add constraint fk_routes_drivers foreign key (driver_id) references drivers (id);
+
+alter table routes add constraint fk_routes_bookings foreign key (booking_id) references bookings (id);
