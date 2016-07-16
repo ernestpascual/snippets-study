@@ -1,0 +1,717 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="expires" content="-1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+		<link href="css/interstitial.css" rel="stylesheet" type="text/css" />
+		<link rel="icon" href="img/fav-icon-smart.png" type="image/png" sizes="48x48">
+		<title>Smart WiFi</title>
+	</head>
+	<body>
+		<div class="container artwork"><img src="img/Top.png" alt="" class="img-responsive"/></div>
+		<div class="container main">
+			<img src="img/SmartWiFi.png" alt="Smart WiFi" class="img-responsive smart-logo"/>
+
+			<!-- LOGIN -->
+			<div id="login-page">
+				
+				<h4 class="text-center red-font">Use 15 minutes FREE!</h4>
+				<form role="form">
+					<div class="input-group">
+						<input class="input-box combiner" type="number" placeholder="Enter Mobile Number" id="mobile_number">
+						<span class="input-group-btn">
+							<button class="btn-red btn-micro combiner" type="button" id="gotointernet" >SURF<br>NOW!</button>
+						</span>
+					</div>
+					<div class="clearfix"></div>
+				</form>
+
+				<div class="divide-40"></div>
+				<h3 class="text-center red-font">OR</h3>
+				<div class="divide-40"></div>
+
+				<h4 class="text-center red-font">Surf via Smart WiFi PIN</h4>
+				<form role="form">
+					<div class="input-group">
+						<input type="text" id="wifipin" class="input-box" placeholder="Enter your WiFi PIN"/>
+						<span class="input-group-btn">
+							<button class="btn-red btn-micro combiner" type="button" id="submitwificard">SURF<br>NOW!</button>
+							<button class="btn-red btn-micro combiner" type="button" id="scratch_surfBtn" style="display: none;">SURF<br>NOW!</button>
+						</span>
+					</div>
+					<p class="span-used" class="hidden"><a href="#existing-pin-modal" data-toggle="modal" id="existing_pin">Use Existing PIN</a></p>
+				</form>
+				<div class="divide-40"></div>
+                <p class="span-terms">By using Smart WiFi, you agree to the</p>
+                <p class="span-terms"><a href='#' id="termsBtn">TERMS AND CONDITIONS</a></p>
+			</div>
+
+			<!-- TIMER -->
+			<div id="timer-page" class="hidden">
+				<div class="divide-40"></div>
+				<div class="divide-50"></div>
+				<p class="text-center time-label red-font">Time Remaining:</p>
+				<h1 class="text-center red-font" id="timer"></h1>
+				<div class="divide-40"></div>
+				<button type="button" class="btn-red text-center" id="stopsurfing">STOP SURFING</button>
+				<div class="divide-50"></div>
+			</div>
+
+			<!-- ERROR -->
+			<div id="error-page" style="display:none">
+				<div class="divide-50"></div>
+				<h4 class="text-center red-font" id="error-spiel">You have fully consumed your WiFi minutes.</h4>
+				<h5 class="text-center red-font">For Smart subs, you may text WIFI20 send to 9991 and enjoy 2 hours of WiFi.</h5>
+				<h5 class="text-center red-font">For non-Smart subs, you may buy WIFI Cards from any hotspot near you.</h5>
+				<div class="divide-50"></div>
+				<p class="redirect">You will be redirected to Smart WiFi Homepage in <span class="redirect-time">10</span> seconds or click <a href="login.html" id="showloginform">Smart WiFi</a>.</p>
+				<div class="divide-50"></div>
+			</div>
+
+			<!-- MODAL -->
+			<div class="modal fade" id="existing-pin-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h2 class="modal-title" id="myModalLabel">List of Existing Pins  </h2>
+							Selected Pin: <label id="ppp"></label>
+						</div>
+						<div class="modal-body">
+							<table id="existing-pins" class="table-bordered table-hover table-responsive">
+								<thead>
+									<tr>
+										<th>WiFi PIN</th>
+										<th>Remaining Time</th>
+										<th>Expiration Date</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-lg btn-primary" id='msb' style='display:none'></span> Start Browsing</button>
+							<button type="button" class="btn btn-lg btn-danger" data-dismiss="modal" id="closest">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="error1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h2 class="modal-title" id="myModalLabel">Error!</h2>
+						</div>
+						<div class="modal-body">
+							<h3>Please enter your WiFi PIN.</h3>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" id="closest">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="error2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h2 class="modal-title" id="myModalLabel">No Internet Connection!</h2>
+						</div>
+						<div class="modal-body">
+							<h3>Please enter your WiFi PIN.</h3>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" id="closest-No-Network">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>			
+			<div class="modal fade" id="interstitial" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static">
+				<div class="modal-dialog">
+					<a class="modalCloseImg simplemodal-close" title="Close"></a>
+					<div class="modal-content">
+						<div class="modal-body">
+							<img src="img/smart-splash.png" class="img-responsive" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- LOGIN -->
+			<form name="login" action="http://wifizone.smart.com.ph/login" method="post" id="login" style="display: none;">
+				<input type="hidden" id="bypass_input" name="username" value="" size="7">
+				<input name="password" type="hidden" id="bypass_password" value="">
+				<input type="hidden" name="dst" value="" id="destination"/>
+				<input type="hidden" name="link-login" value="http://wifizone.smart.com.ph/login" id="link_login">
+				<input type="submit" id="goBtn" style="display: none;">
+			</form>
+
+			<form name="login" action="http://wifizone.smart.com.ph/login" method="post" id="login_scratch" style="display: none;">
+				<input type="hidden" id="scratch_input" name="username" value="" size="18">
+				<input name="password" type="hidden" id="scratch_password" value="">
+				<input type="hidden" name="dst" value="" id="destination2"/>
+				<input type="hidden" name="link-login" value="http://wifizone.smart.com.ph/login" id="link_login2">
+				<input type="submit" id="scratch_goBtn" style="display: none;">
+			</form>
+		</div>
+		<div class="container artwork"><img src="img/Bottom.png" alt="" class="img-responsive"/></div>
+		
+		<script type='text/javascript' src='js/jquery.js'></script>
+		<script type='text/javascript' src='js/bootstrap.min.js'></script>
+		<script src="js/jquery.cross-domain-ajax.js"></script>
+		<script src="js/util-xml2json.js"></script>
+		<script language="JavaScript">
+			$(window).load(function(){
+				$('#interstitial').modal('show');
+			});
+			$('#interstitial').click(function(){
+				$('#interstitial').modal('hide');
+			});
+			if (sessionStorage.getItem("Page2Visited")) {
+				sessionStorage.removeItem("Page2Visited");
+				window.location.reload(true);
+			}
+			if (navigator.userAgent.match(/iPhone/i) != null ){
+				viewport = document.querySelector("meta[name=viewport]");
+				viewport.setAttribute('content', 'width=750px, user-scalable=1');
+			}
+// start of dynamic Ads
+			jQuery(document).ready(function () {
+			var uaeURL = "http://marketplace.smartads.com.ph/mobucks/feedparam.php?uid=smartMobileAd&passwd=4316f3b47cb2ca528cdc70397d1e3c9d&plid=20&ot=12978815454711&msn=123456788";
+			$.ajax({
+				url: uaeURL,
+				type: "GET",
+				dataType: "xml",
+				success: function (response) {
+					var text = response.responseText;
+					var start= text.indexOf('<IMGURL>')+8;
+					var end= text.indexOf('</IMGURL>');
+					var startlink= text.indexOf('<IMGLINK>')+9;
+					var endlink= text.indexOf('</IMGLINK>');
+					var imgUrl = text.substring(start,end);
+					var imgLink = text.substring(startlink,endlink);
+					var imgLink1 = imgLink.replace("&amp;", "&"); 
+					var img = '<img  src="'+imgUrl+'"/>';
+					$("#ads-url").html(img);
+					$("#ads-url").attr("href",imgLink1);
+					console.log("haha");
+				},
+				error: function (xhr, status) {
+					alert("cannot connect to:"+uaeURL);
+				}
+			});
+// end of dynamic Ads
+/* 
+//Old validation for dropdown
+
+		var isanswered = false;
+		$('#network').change(function () {
+			var optid = $(this).val();
+			if (optid == "SQID" || optid == "What is your usual network service provider") {
+				isanswered = false;
+			} else {
+				isanswered = true;
+			}
+		});
+*/
+
+				var mac = 'Wifun_4c5e0cb58a5e';
+				var user = '6C:40:08:BC:9D:CE';
+				var device = mac.split('_')[1];
+				var userMac = user.split(':');
+				var mobileMac = userMac[0] + userMac[1] + userMac[2] + userMac[3] + userMac[4] + userMac[5];
+				//var device = "28E31F572591";
+				//var mobileMac = "50465DA7DF2B";
+				var pin = '';
+				var mobile_number = '0';
+				var pinvalue = '';
+				var pinArray = [];
+				var mobToken = '';
+				var denomId;
+				var retSurvey = 'FALSE'; //ETA
+				var bypassPIN;// = $('#bypass_input').val();
+				var urlCore = 'http://54.169.49.3/PowApp/captive/portals/';
+				var max_chars ;
+				var count_key_question = [];
+				var q_count;
+				var mobile_no = $("#mobile_number").val();
+				//var urlCore = 'http://45.56.78.139/PowApp/captive/portals/';
+				//var urlCore = 'http://localhost/PowApp/captive/portals/';
+
+				$.ajax({
+					url: urlCore + 'timer/' + device,
+					dataType: "jsonp"
+				});
+
+
+				myfunction = function (data) {
+					var a = [];
+					var b = [];
+					console.log(data);
+					console.log(data.denominations[0]['denomId']);
+					denomId = data.denominations[0]['denomId'];
+
+			/*
+Old generation of Question Survey
+			for (var key in data.surveyDetails) {
+				var obj = data.surveyDetails[key];
+				var s = obj.Surveys;
+				a.push(obj.surveyQuestion);
+				b.push(obj.surveyQuestionId);
+				$('#foo').val(obj.surveyQuestionId);
+				for (var i = 0; i < s.length; i++) {
+					a.push(s[i].surveyAnswer);
+					b.push(s[i].surveyAnswerId);
+				}
+			}
+			for (var i = 0; i < a.length; i++) {
+				var abc = b[i];
+				if (i == 0) {
+					abc = "SQID";
+				}
+				$('#network').append("<option value='" + abc + "'>" + a[i] + "</option>");
+			}
+			*/
+				}
+				
+				
+					$('input[type="number"]').keydown( function(e){
+						if ($(this).val().length >= "11") { 
+							$(this).val($(this).val().substr(0, "11"));
+					}
+					});
+					$('input[type="number"]').keyup( function(e){
+						if ($(this).val().length >= "11") { 
+							$(this).val($(this).val().substr(0, "11"));
+					}
+					});
+
+					$('input[type="number"]').on('keypress', function(e){
+						return e.metaKey || // cmd/ctrl
+							e.which <= 0 || // arrow keys
+							e.which == 8 || // delete key
+								/[0-9]/.test(String.fromCharCode(e.which)); // numbers
+					});	 
+					
+					
+		$("#closest-No-Network").click(function () {
+			console.log("closest-No-Network");
+			location.reload();
+			
+		});
+		
+
+		$("#gotointernet").click(function () {
+			var mobile_no = $("#mobile_number").val();
+//New Validation
+			if (validateSurvey()) { 
+//If survey is already validate			
+//Validation for Token Generated
+				checkIfAllowed();
+				deviceStatus = function (data) {
+					//console.log(data); //checkIfAllowed
+					if (data.code == "allowed") {
+						getToken();
+						mobileToken = function (data) {
+							console.log(data); //getToken
+							pin = data.token;
+							jQuery('#bypass_input').val(data.token);
+							jQuery('#bypass_password').val(data.token);
+							bypassPIN = $('#bypass_input').val();
+							
+							//checkIfDeviceAllowed()
+//Saving Survey							
+							$.ajax({
+							url: 'http://smart.rpt1.wifunph.com/dotcportal/WadsReports/saveSurveyReports3/' + device + '/' + mobileMac + '/' + mobile_no +'/Project Starbucks/Project Starbucks',
+							dataType: "jsonp",			
+							timeout: 10000,
+							error: function (x, t, m) {
+							if (t === "timeout") {
+							$("#error2").modal('show');
+							$('#error2 .modal-body h3').text('No Internet Connection. Please Try Again Later.');
+							} else {
+
+								}
+							}
+						});
+						queryStatus = function (data) {
+//SavedGotoInternet                                                   
+						if (data.status == "saved") {
+//Successfull Go to Internet
+								jQuery('#destination').val("timer.html"); // destinationn
+								jQuery('#goBtn').click();
+						} else {
+								$('#error1').modal('show');
+								$('#error1 .modal-body h3').text('Server Error.');
+						}
+												
+						}
+						}
+					}
+					else {
+						$('#login-page').addClass('hidden');
+						$('#error-page').show();
+						countdownTimer(10,'login.html');
+					} 
+					}
+			} 
+			return false;
+		});
+		
+//Start of Validation Function for Survey
+		function validateSurvey() {
+			var mobile_no = $("#mobile_number").val();
+					if (mobile_no == "") {
+							$("#error1").modal('show');
+							$('#error1 .modal-body h3').text('Please enter valid mobile number. Ex. 09181234567.');
+					}
+					else if (mobile_no.length != 0) {
+							//execute checkPhone function to check if number is in correct format
+							if (checkPhone(mobile_no,"09","11")) {
+								return true;
+							//check age and gender if number is already correct.
+							}
+					}
+		}
+//End of Validation Function for Survey		
+//Start of Validation Function for Number and Email		
+				function checkPhone(phone_num,prefix,length) {
+					var phone_num = String(phone_num);
+
+					if (!isNaN(phone_num)) {
+						//if phone_num is a set of numbers and length is 11
+						if(prefix == "none"){
+							if (phone_num.length == length) {
+								return true;
+							}else {
+
+								$("#error1").modal('show');
+								$('#error1 .modal-body h3').text('Please enter valid mobile number. Ex. 09181234567.');
+								return false;
+							}
+						}
+						else if(length == "none"){
+							if (phone_num.substr(0, 2) == prefix) {
+								 return true;
+							}else {
+								
+								//console.log("else11");
+								$("#error1").modal('show');
+								$('#error1 .modal-body h3').text('Please enter valid mobile number. Ex. 09181234567.');
+								return false;
+							}
+						}
+						else if(prefix == "none" && length == "none"){
+								return true;
+						}
+						else{
+							if (phone_num.substr(0, 2) == prefix && phone_num.length == length) {
+								return true;
+							}else {
+
+								$("#error1").modal('show');
+								$('#error1 .modal-body h3').text('Please enter valid mobile number. Ex. 09181234567.');
+								return false;
+							}
+						}
+					} else {
+
+						$("#error1").modal('show');
+						$('#error1 .modal-body h3').text('Please enter valid mobile number. Ex. 09181234567.');
+						return false;
+
+					}
+				}
+				
+				function validateEmail(emailField){
+					var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+					return regex.test(emailField);
+
+				}
+//End of Validation Function for Number and Email	
+//Start of Valiidation for Tokens	
+				function checkIfAllowed() {
+
+					jQuery.ajax({
+						url: urlCore + 'checkIfAllowedwithDenom/' + mobileMac + '/' + mobileMac + '/' + device + '/' + denomId,
+						dataType: "jsonp"
+					});
+				}
+				function checkIfDeviceAllowed(){
+				jQuery.ajax({
+					url: urlCore+'checkIfDeviceAllowedwithDenom/'+device+'/'+mobileMac+'/'+bypassPIN+'/'+denomId,
+					dataType: "jsonp"
+				});
+				}
+
+				function countdownTimer(count,url) {
+					var count = count;
+					var url = url;
+					var countdown = setInterval(function(){
+						$(".redirect-time").html(count);
+						if (count == 0) {
+						clearInterval(countdown);
+						window.open(url, '_self');
+						}
+						count--;
+					}, 1000);
+				}
+
+				function getToken() {
+
+					var url_value = urlCore + 'mobiletoken/' + device + '/' + mobileMac + '/' + denomId + '/0/1/' + mobileMac + '/1';
+					jQuery.ajax
+							({
+								url: url_value,
+								dataType: "jsonp"
+							});
+				}
+				//});
+//End of Valiidation for Tokens
+
+//Code for Stratch Card Validation
+				$('#existing_pin1').click(function () {
+					jQuery.ajax({
+						url: urlCore + "check_cards/" + device,
+						dataType: "jsonp"
+					});
+
+					scratchPins1 = function (data) {
+						if (data.pins == 'none') {
+							//alert("Walang Laman");
+						} else {
+							jQuery('#existing-pins tbody').empty();
+							for (var key in data.pins) {
+								var totalSec = data.remTime;
+								var days = parseInt(totalSec / 86400);
+								var hours = parseInt(totalSec / 3600) % 24;
+								var minutes = parseInt(totalSec / 60) % 60;
+								var seconds = parseInt(totalSec % 60, 10);
+
+								var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+
+								jQuery('#existing-pins').append("<tr><td><a href='#' value='" + data.pins + "' class='val'>" + data.pins + "</a></td><td>" + result + "</td></tr>");
+								$('.val').click(function () {
+									$('#p').html(jQuery(this).attr('value'));
+								});
+								jQuery('#pinLabel').show();
+								jQuery('#availablePins').show();
+							}
+						}
+					}
+				});
+				$('#close').click(function () {
+					$('#p').text("");
+				});
+
+
+				//************************************************************************************************
+				jQuery('#scratch_surfBtn').click(function () {
+					jQuery.ajax({
+						url: urlCore + "userTrails/4/" + mobileMac + "/" + device,
+						dataType: "jsonp"
+					});
+					jQuery('#destination2').val("scratch_time.html");
+					jQuery('#scratch_goBtn').click();
+					return false;
+				});
+				var scratch_denom = '';
+				$('#submitwificard').click(function () {
+					jQuery.ajax({
+						url: urlCore + "userTrails/3/" + mobileMac + "/" + device,
+						dataType: "jsonp"
+					});
+					scratchPinVal = $('#wifipin').val();
+					var wifipin = scratchPinVal;
+					//var wifipin = '10282170046762';
+					if (wifipin == '') {
+						$('#error1 .modal-body h3').text('Please enter your WiFi card pin.');
+						$("#error1").modal();
+					} else {
+						if (wifipin.length != 10 && wifipin.length != 14) {
+							$('#error1 .modal-body h3').text('Invalid PIN.');
+							$('#error1').modal();
+						} else if (wifipin.length == 14)
+						{
+							$.ajax({
+								url: urlCore + 'scratchCard/' + device + '/0/' + mobileMac + '/' + wifipin,
+								dataType: "jsonp",
+								success: function (data) {
+
+								}
+							});
+
+							jQuery.ajax({
+								url: urlCore + 'cardStatus/' + wifipin,
+								dataType: "jsonp"
+							});
+
+							cardStatus = function (data) {
+								scratch_denom = data.denom;
+								var totalSec = data.time;
+								var hours = parseInt(totalSec / 3600) % 24;
+								var minutes = parseInt(totalSec / 60) % 60;
+								var seconds = parseInt(totalSec % 60, 10);
+
+								var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+								jQuery('#timer').text(result);
+							}
+
+							scratchStatus = function (data) {
+								console.log(data.remarks);
+								if (data.remarks == "FREE FOR USE") {
+									jQuery('#scratch_input').val(wifipin);
+									jQuery('#scratch_password').val(wifipin);
+									jQuery('#scratch_surfBtn').trigger("click");
+									//$('#scratch_goBtn').click();
+								}
+								else if (data.remarks == "ON USE") {
+									$('#login-page').addClass("hidden");
+									$('#error-page').show();
+									$('#error-spiel').text('Your PIN currently has an active session.');
+									countdownTimer(10,'login.html');
+								}
+								else if (data.remarks == "EXPIRED") {
+									$('#login-page').addClass("hidden");
+									$('#error-page').show();
+									$('#error-spiel').text('Your PIN is expired. Enter new PIN.');
+									countdownTimer(10,'login.html');
+								}
+								else if (data.remarks == "CONSUMED") {
+									$('#login-page').addClass("hidden");
+									$('#error-page').show();
+									$('#error-spiel').text('You have fully consumed your WiFi Minutes.');
+									countdownTimer(10,'login.html');
+								}
+								else if (data.remarks == "MAXIMUM REACHED") {
+									$('#login-page').addClass("hidden");
+									$('#error-page').show();
+									$('#error-spiel').text('The maximum number of allowed devices have used your PIN.');
+									countdownTimer(10,'login.html');
+								}
+								else if (data.description == "Cannot connect to server. Please try again later.") {
+									$('#error1 .modal-body h3').text('Cannot connect to server. Please try again.');
+									$('#error1').modal();
+								}
+								else {
+									$('#error1 .modal-body h3').text('Invalid PIN.');
+									$('#error1').modal();
+								}
+							}
+
+						} else{ //////////////////////////////////////////////for scratch_pin.length == 10
+					//alert("10 char");
+				//console.log("CATER");
+					jQuery.ajax({
+						url: urlCore+'availmentStatus/'+wifipin,
+						dataType: "jsonp"
+					});
+
+					availmentStatus = function(data){
+
+						var totalSec = data.time;
+						var hours = parseInt( totalSec / 3600 ) % 24;
+						var minutes = parseInt( totalSec / 60 ) % 60;
+						var seconds = parseInt(totalSec % 60, 10);
+
+						var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+						jQuery('#time').text(result);
+
+						if(data.code=="FREE FOR USE"){
+							jQuery('#scratch_input').val(wifipin);
+							jQuery('#scratch_password').val(wifipin);
+							jQuery('#scratch_goBtn').trigger("click");
+						}
+						else if(data.code=="ON USE"){
+							$('#login-page').addClass("hidden");
+							$('#error-page').show();
+							$('#error-spiel').text('Your PIN currently has an active session.');
+							countdownTimer(10,'login.html');
+						}
+						else if(data.code=="EXPIRED"){
+							$('#login-page').addClass("hidden");
+							$('#error-page').show();
+							$('#error-spiel').text('Your PIN is expired. Enter new PIN.');
+							countdownTimer(10,'login.html');
+						}
+						else if(data.code=="CONSUMED"){
+							$('#login-page').addClass("hidden");
+							$('#error-page').show();
+							$('#error-spiel').text('You have fully consumed your WiFi Minutes.');
+							countdownTimer(10,'login.html');
+						}
+						else{
+							$('#error1 .modal-body h3').text('Invalid PIN.');
+							$('#error1').modal();
+						}
+					}
+				}
+					}
+					return false;
+				});
+				jQuery('#faqBtn').click(function () {
+					window.open("faq.html","_self");
+				});
+
+				jQuery('#termsBtn').click(function () {
+					window.open("terms.html","_self");
+				});
+				$('#existing_pin').click(function () {
+					jQuery.ajax({
+						url: urlCore + "check_cards/" + mobileMac,
+						dataType: "jsonp"
+					});
+					console.log(mobileMac);
+
+
+					scratchPins = function (data) {
+						if (data.pins == 'none') {
+							//alert("Walang Laman");
+						} else {
+							jQuery('#existing-pins tbody').empty();
+							for (var key in data.pins) {
+								var totalSec = data.remTime[key];
+								var days = parseInt(totalSec / 86400);
+								var hours = parseInt(totalSec / 3600) % 24;
+								var minutes = parseInt(totalSec / 60) % 60;
+								var seconds = parseInt(totalSec % 60, 10);
+
+								//data.remTime[key]
+
+								var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+
+								jQuery('#existing-pins').append("<tr><td><a href='#' value='" + data.pins[key] + "' class='val'>" + data.pins[key] + "</a></td><td>" + result + "</td><td>" + data.expiry[key] + "</td></tr>");
+								$('.val').click(function () {
+									$('#ppp').html(jQuery(this).attr('value'));
+									$('#msb').show();
+								});
+								jQuery('#pinLabel').show();
+								jQuery('#availablePins').show();
+							}
+						}
+					}
+
+				});
+				$('#closest').click(function () {
+					$('#ppp').text("");
+					$('#msb').hide();
+				});
+				$('#msb').click(function () {
+				// alert("#msb");
+					var foobar = $('#ppp').text();
+					jQuery('#scratch_input').val(foobar);
+					jQuery('#scratch_password').val(foobar);
+					jQuery('#scratch_surfBtn').trigger("click");
+				});
+			});
+		</script>
+	</body>
+</body>
+</html>
